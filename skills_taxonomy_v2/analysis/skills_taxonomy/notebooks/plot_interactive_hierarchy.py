@@ -24,6 +24,10 @@
 # cd ../../../..
 
 # %%
+import sys
+
+sys.path.append("/Users/india.kerlenesta/Projects/skills-taxonomy-v2/")
+
 from skills_taxonomy_v2.getters.s3_data import load_s3_data
 from skills_taxonomy_v2 import PROJECT_DIR
 
