@@ -28,4 +28,3 @@ rtree
 urllib3
 shapely
 streamlit
--e git+ssh://git@github.com/nestauk/skills-taxonomy-v2.git@275fdda833901a0a2708a3cac81a3ce68c78c955#egg=skills_taxonomy_v2
