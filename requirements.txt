@@ -28,4 +28,3 @@ rtree
 urllib3
 shapely
 streamlit
--e skills_taxonomy_v2/getters/s3_data.py
