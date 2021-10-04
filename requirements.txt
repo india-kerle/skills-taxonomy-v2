@@ -28,3 +28,4 @@ rtree
 urllib3
 shapely
 streamlit
+-e skills_taxonomy_v2
