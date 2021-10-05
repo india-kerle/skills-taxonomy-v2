@@ -21,6 +21,7 @@
 # 2. Interactive plot - plot skills and use interactive filter to colour by skills groups
 from collections import Counter, defaultdict
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
