@@ -132,10 +132,8 @@ skill_hierarchy = load_s3_data(s3, bucket_name, skill_hierarchy_file)
 # ### Manual names for level A
 
 # %%
-with open("/Users/india.kerlenesta/Projects/skills-taxonomy-v2/skills_taxonomy_v2/utils/2021.09.06_level_a_rename_dict.json",
-    "r",
-) as f:
-    level_a_rename_dict = json.load(f)
+level_a_rename_dict_file = "inputs/2021.09.06_level_a_rename_dict.json"
+level_a_rename_dict = load_s3_data(s3, bucket_name, level_a_rename_dict_file)
 
 # %% [markdown]
 # ## Filter sentence data
