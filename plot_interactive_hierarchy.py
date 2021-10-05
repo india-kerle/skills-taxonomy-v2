@@ -82,7 +82,7 @@ bpl.output_notebook()
 
 # %%
 bucket_name = "skills-taxonomy-v2"
-s3 = boto3.resource("s3")
+s3 = boto3.resource("s3", aws_access_key_id=st.secrets["ACCESS_ID"], aws_secret_access_key= st.secrets["ACCESS_KEY"])
 
 # %% [markdown]
 # ## Load hierarchy data
