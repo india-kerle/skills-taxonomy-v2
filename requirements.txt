@@ -4,4 +4,4 @@ matplotlib
 boto3
 ipywidgets
 streamlit
-bokeh
+bokeh==2.2.2
