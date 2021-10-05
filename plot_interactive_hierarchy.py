@@ -21,7 +21,6 @@
 # 2. Interactive plot - plot skills and use interactive filter to colour by skills groups
 from collections import Counter, defaultdict
 import json
-from pathlib import Path
 import pickle
 import gzip
 from fnmatch import fnmatch
@@ -87,9 +86,6 @@ s3 = boto3.resource("s3", aws_access_key_id=st.secrets["ACCESS_ID"], aws_secret_
 # %% [markdown]
 # ## Load hierarchy data
 
-# %%
-PROJECT_DIR = Path(__file__).resolve().parents[1]
-
 def load_s3_data(s3, bucket_name, file_name):
     """
     Load data from S3 location.
@@ -136,8 +132,7 @@ skill_hierarchy = load_s3_data(s3, bucket_name, skill_hierarchy_file)
 # ### Manual names for level A
 
 # %%
-with open(
-    str(PROJECT_DIR) + "/skills_taxonomy_v2/utils/2021.09.06_level_a_rename_dict.json",
+with open("/Users/india.kerlenesta/Projects/skills-taxonomy-v2/skills_taxonomy_v2/utils/2021.09.06_level_a_rename_dict.json",
     "r",
 ) as f:
     level_a_rename_dict = json.load(f)
