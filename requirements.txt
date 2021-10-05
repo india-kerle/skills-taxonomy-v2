@@ -5,7 +5,4 @@ boto3
 ipywidgets
 streamlit
 bokeh
-gzip
-fnmatch
-os
 logging
