@@ -143,8 +143,6 @@ sentence_data = pd.DataFrame(sentence_data)
 sentence_data = sentence_data[sentence_data["Cluster number"] != -1]
 
 # %%
-sentence_data.head(2)
-
 # %% [markdown]
 # ## Create skills hierarchy dataframe with average sentence coordinates
 
@@ -303,8 +301,6 @@ def update(col_by, level_A, level_B, level_C, radius_size):
     )
 
     left.data_source.data = filter_skills(skill_hierarchy_df, level_A, level_B, level_C)
-    push_notebook()
-
 
 # %%
 source = ColumnDataSource(data=skill_hierarchy_df)
@@ -333,8 +329,6 @@ left = update_colours(
     skill_hierarchy_df, left_gp, col_by="A", radius_size=0.1, alpha=0.5
 )
 
-p = gridplot([[left_gp]])
-show(p, notebook_handle=True)
 interact(
     update,
     col_by=["A", "B", "C"],
