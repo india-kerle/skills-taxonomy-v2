@@ -19,15 +19,6 @@
 # There are two plots produced from this script:
 # 1. Basic plot - plot skills and colour by one hierarchy level at a time
 # 2. Interactive plot - plot skills and use interactive filter to colour by skills groups
-
-# %%
-# cd ../../../..
-
-# %%
-from skills_taxonomy_v2.getters.s3_data import load_s3_data
-from skills_taxonomy_v2 import PROJECT_DIR
-
-# %%
 from collections import Counter, defaultdict
 import json
 
@@ -92,6 +83,39 @@ s3 = boto3.resource("s3")
 # ## Load hierarchy data
 
 # %%
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+
+def load_s3_data(s3, bucket_name, file_name):
+    """
+    Load data from S3 location.
+
+    s3: S3 boto3 resource
+    bucket_name: The S3 bucket name
+    file_name: S3 key to load
+    """
+    obj = s3.Object(bucket_name, file_name)
+    if fnmatch(file_name, "*.jsonl.gz"):
+        with gzip.GzipFile(fileobj=obj.get()["Body"]) as file:
+            return [json.loads(line) for line in file]
+    elif fnmatch(file_name, "*.jsonl"):
+        file = obj.get()["Body"].read().decode()
+        return [json.loads(line) for line in file]
+    elif fnmatch(file_name, "*.json.gz"):
+        with gzip.GzipFile(fileobj=obj.get()["Body"]) as file:
+            return json.load(file)
+    elif fnmatch(file_name, "*.json"):
+        file = obj.get()["Body"].read().decode()
+        return json.loads(file)
+    elif fnmatch(file_name, "*.csv"):
+        return pd.read_csv(os.path.join("s3://" + bucket_name, file_name))
+    elif fnmatch(file_name, "*.pkl") or fnmatch(file_name, "*.pickle"):
+        file = obj.get()["Body"].read().decode()
+        return pickle.loads(file)
+    else:
+        print(
+            'Function not supported for file type other than "*.jsonl.gz", "*.jsonl", or "*.json"'
+        )
+
 sentence_data = load_s3_data(
     s3,
     bucket_name,
