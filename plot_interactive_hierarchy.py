@@ -16,8 +16,7 @@
 
 # %% [markdown]
 # ## Plotting hierarchy
-# There are two plots produced from this script:
-# 1. Basic plot - plot skills and colour by one hierarchy level at a time
+# There is one plot produced from this script for streamlit:
 # 2. Interactive plot - plot skills and use interactive filter to colour by skills groups
 from collections import Counter, defaultdict
 import json
@@ -76,8 +75,6 @@ from bokeh.palettes import (
     inferno,
 )
 from bokeh.transform import linear_cmap
-
-bpl.output_notebook()
 
 # %%
 bucket_name = "skills-taxonomy-v2"
@@ -173,76 +170,6 @@ skill_hierarchy_df["Average reduced_points y"] = skill_hierarchy_df[
     "Skill number"
 ].apply(lambda x: average_emb_clust.get(str(x))[1])
 
-
-# %% [markdown]
-# ## Basic plot - plot skills and colour by one hierarchy level at a time
-
-# %%
-def plot_skills_by_level(skill_hierarchy_df, col_by="A"):
-    hier_levela = skill_hierarchy_df["Hierarchy level A"].astype(str).tolist()
-    hier_levelb = skill_hierarchy_df["Hierarchy level B"].astype(str).tolist()
-    hier_levelc = skill_hierarchy_df["Hierarchy level C"].astype(str).tolist()
-
-    hier_levela_names = skill_hierarchy_df["Hierarchy level A name"].tolist()
-    hier_levelb_names = skill_hierarchy_df["Hierarchy level B name"].tolist()
-    hier_levelc_names = skill_hierarchy_df["Hierarchy level C name"].tolist()
-
-    skill_names = skill_hierarchy_df["Skill name"].tolist()
-    reduced_x = skill_hierarchy_df["Average reduced_points x"].tolist()
-    reduced_y = skill_hierarchy_df["Average reduced_points y"].tolist()
-    color_palette = viridis
-
-    if col_by == "A":
-        colors_by_labels = hier_levela
-    elif col_by == "B":
-        colors_by_labels = hier_levelb
-    elif col_by == "C":
-        colors_by_labels = hier_levelc
-
-    ds_dict = dict(
-        x=reduced_x,
-        y=reduced_y,
-        skill_names=skill_names,
-        label=colors_by_labels,
-        hier_levela=hier_levela_names,
-        hier_levelb=hier_levelb_names,
-        hier_levelc=hier_levelc_names,
-    )
-    hover = HoverTool(
-        tooltips=[
-            ("Skill name", "@skill_names"),
-            ("Hierarchy level A", "@hier_levela"),
-            ("Hierarchy level B", "@hier_levelb"),
-            ("Hierarchy level C", "@hier_levelc"),
-        ]
-    )
-    source = ColumnDataSource(ds_dict)
-    unique_colors = list(set(colors_by_labels))
-    num_unique_colors = len(unique_colors)
-
-    color_mapper = LinearColorMapper(
-        palette="Turbo256", low=0, high=len(unique_colors) + 1
-    )
-
-    p = figure(
-        plot_width=500,
-        plot_height=500,
-        tools=[hover, WheelZoomTool(), BoxZoomTool(), SaveTool()],
-        title=f"Skills coloured by hierarchy level {col_by}",
-        toolbar_location="below",
-    )
-    p.circle(
-        x="x",
-        y="y",
-        radius=0.1,
-        alpha=0.5,
-        source=source,
-        color={"field": "label", "transform": color_mapper},
-    )
-    return p
-
-
-# %%
 # %% [markdown]
 # ## Interactive plot - plot skills and use interactive filter to colour by skills groups
 
@@ -301,6 +228,8 @@ def update(col_by, level_A, level_B, level_C, radius_size):
     )
 
     left.data_source.data = filter_skills(skill_hierarchy_df, level_A, level_B, level_C)
+    push_notebook()
+
 
 # %%
 source = ColumnDataSource(data=skill_hierarchy_df)
@@ -329,25 +258,27 @@ left = update_colours(
     skill_hierarchy_df, left_gp, col_by="A", radius_size=0.1, alpha=0.5
 )
 
-interact(
-    update,
-    col_by=["A", "B", "C"],
-    level_A=["All"] + sorted(skill_hierarchy_df["Hierarchy level A"].unique().tolist()),
-    level_B=["All"] + sorted(skill_hierarchy_df["Hierarchy level B"].unique().tolist()),
-    level_C=["All"] + sorted(skill_hierarchy_df["Hierarchy level C"].unique().tolist()),
-    radius_size=(0.001, 0.1, 0.001),
-)
+# %%
 
 # %%
 # streamlit code
 title = '<span style="color:blue; font-family:Courier New; text-align:center; font-size:40px;">Explore the Skills Taxonomy.</span>'
 st.markdown(title, unsafe_allow_html=True)
-instruction = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">Select a skill level in the dropdown box:</span>'
-st.markdown(instruction, unsafe_allow_html=True)
 
-levels = st.selectbox("", ("A", "B", "C"))
-p = plot_skills_by_level(skill_hierarchy_df, col_by=levels)
-st.bokeh_chart(p)
+abstract = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">This interactive graph is based on a new data-driven approach to building a UK skills taxonomy, improving upon the original approach developed in [Djumalieva and Sleeman (2018)](https://www.escoe.ac.uk/the-first-publicly-available-data-driven-skills-taxonomy-for-the-uk/). The new method improves on the original method as it does not rely on a predetermined list of skills, and can instead automatically detect previously unseen skills in online job adverts. These ‘skill sentences’ are then grouped to define distinct skills, and a hierarchy is formed. The resulting taxonomy contains 18,893 separate skills.</span>'
+st.markdown(abstract, unsafe_allow_html=True)
+
+instruction2 = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">Interrogate the interactive skills hierarchy by choosing each skill level in the dropdown boxes:</span>'
+st.markdown(instruction2, unsafe_allow_html=True)
+
+hierarchy_levels = st.selectbox("Skill Granularity", ("A", "B", "C"))
+level_a = st.selectbox("Level A Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level A"].unique().tolist()))
+level_b = st.selectbox("Level B Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level B"].unique().tolist()))
+level_c = st.selectbox("Level C Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level C"].unique().tolist()))
+
+p2 = gridplot([[left_gp]])
+update(hierarchy_levels, level_a, level_b, level_c, radius_size=0.1)
+st.bokeh_chart(p2)
 
 links = '<span style="color:black; font-family:Courier New; text-align:center; font-size:15px;">Read the full technical report [here](https://docs.google.com/document/d/1ZHE6Z6evxyUsSiojdNatSa_yMDJ8_UlB1K4YD1AhGG8/edit) and the extended article [here](https://docs.google.com/document/d/14lY7niHD0lyYpBj8TtlFGMSA2q4p4u5hl6LnXE4HYLs/edit).</span>'
 st.markdown(links, unsafe_allow_html=True)
