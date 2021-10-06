@@ -268,7 +268,7 @@ st.markdown(title, unsafe_allow_html=True)
 abstract = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">This interactive graph is based on a new data-driven approach to building a UK skills taxonomy, improving upon the original approach developed in [Djumalieva and Sleeman (2018)](https://www.escoe.ac.uk/the-first-publicly-available-data-driven-skills-taxonomy-for-the-uk/). The new method improves on the original method as it does not rely on a predetermined list of skills, and can instead automatically detect previously unseen skills in online job adverts. These ‘skill sentences’ are then grouped to define distinct skills, and a hierarchy is formed. The resulting taxonomy contains 18,893 separate skills.</span>'
 st.markdown(abstract, unsafe_allow_html=True)
 
-instruction2 = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">Interrogate the interactive skills hierarchy by choosing each skill level in the dropdown boxes:</span>'
+instruction2 = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">Interrogate the interactive skills hierarchy by choosing each skill level in the dropdown boxes. Hover over each point to investigate skills information:</span>'
 st.markdown(instruction2, unsafe_allow_html=True)
 
 hierarchy_levels = st.selectbox("Skill Granularity", ("A", "B", "C"))
