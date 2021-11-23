@@ -146,9 +146,9 @@ sentence_data = sentence_data[sentence_data["Cluster number"] != -1]
 # %%
 skill_hierarchy_df = pd.DataFrame(skill_hierarchy).T
 skill_hierarchy_df["Skill number"] = skill_hierarchy_df.index
-skill_hierarchy_df["Hierarchy level A name"] = skill_hierarchy_df[
-    "Hierarchy level A"
-].apply(lambda x: level_a_rename_dict[str(x)])
+#skill_hierarchy_df["Hierarchy level A name"] = skill_hierarchy_df[
+#    "Hierarchy level A"
+#].apply(lambda x: level_a_rename_dict[str(x)])
 
 # %%
 # Average reduced embedding per skill
