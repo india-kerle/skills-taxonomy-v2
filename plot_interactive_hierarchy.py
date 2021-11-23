@@ -262,6 +262,7 @@ left = update_colours(
 
 # streamlit code
 def skills_tool():
+    st.success('successfully logged in.')
     title = '<span style="color:blue; font-family:Courier New; text-align:center; font-size:40px;">Explore the Skills Taxonomy.</span>'
     st.markdown(title, unsafe_allow_html=True)
 
