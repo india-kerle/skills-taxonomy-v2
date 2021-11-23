@@ -260,25 +260,32 @@ left = update_colours(
 
 # %%
 
-# %%
 # streamlit code
-title = '<span style="color:blue; font-family:Courier New; text-align:center; font-size:40px;">Explore the Skills Taxonomy.</span>'
-st.markdown(title, unsafe_allow_html=True)
+def skills_tool():
+    title = '<span style="color:blue; font-family:Courier New; text-align:center; font-size:40px;">Explore the Skills Taxonomy.</span>'
+    st.markdown(title, unsafe_allow_html=True)
 
-abstract = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">This interactive graph is based on a new data-driven approach to building a UK skills taxonomy, improving upon the original approach developed in [Djumalieva and Sleeman (2018)](https://www.escoe.ac.uk/the-first-publicly-available-data-driven-skills-taxonomy-for-the-uk/). The new method improves on the original method as it does not rely on a predetermined list of skills, and can instead automatically detect previously unseen skills in online job adverts. These ‘skill sentences’ are then grouped to define distinct skills, and a hierarchy is formed. The resulting taxonomy contains 18,893 separate skills.</span>'
-st.markdown(abstract, unsafe_allow_html=True)
+    abstract = '<span style="color:black; font-family:Courier New; text-align:center; font-size:20px;">This interactive graph is based on a new data-driven approach to building a UK skills taxonomy, improving upon the original approach developed in [Djumalieva and Sleeman (2018)](https://www.escoe.ac.uk/the-first-publicly-available-data-driven-skills-taxonomy-for-the-uk/). The new method improves on the original method as it does not rely on a predetermined list of skills, and can instead automatically detect previously unseen skills in online job adverts. These ‘skill sentences’ are then grouped to define distinct skills, and a hierarchy is formed. The resulting taxonomy contains 18,893 separate skills.</span>'
+    st.markdown(abstract, unsafe_allow_html=True)
 
-instruction2 = '<span style="color:black; font-family:Courier New; font-style: italic; text-align:center; font-size:20px;">Interrogate the interactive skills hierarchy by choosing each skill level in the dropdown boxes. Hover over each point to investigate skills information:</span>'
-st.markdown(instruction2, unsafe_allow_html=True)
+    instruction2 = '<span style="color:black; font-family:Courier New; font-style: italic; text-align:center; font-size:20px;">Interrogate the interactive skills hierarchy by choosing each skill level in the dropdown boxes. Hover over each point to investigate skills information:</span>'
+    st.markdown(instruction2, unsafe_allow_html=True)
 
-hierarchy_levels = st.selectbox("Skill Granularity", ("A", "B", "C"))
-level_a = st.selectbox("Level A Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level A"].unique().tolist()))
-level_b = st.selectbox("Level B Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level B"].unique().tolist()))
-level_c = st.selectbox("Level C Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level C"].unique().tolist()))
+    hierarchy_levels = st.selectbox("Skill Granularity", ("A", "B", "C"))
+    level_a = st.selectbox("Level A Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level A"].unique().tolist()))
+    level_b = st.selectbox("Level B Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level B"].unique().tolist()))
+    level_c = st.selectbox("Level C Skills", ["All"] + sorted(skill_hierarchy_df["Hierarchy level C"].unique().tolist()))
 
-p2 = gridplot([[left_gp]])
-update(hierarchy_levels, level_a, level_b, level_c, radius_size=0.1)
-st.bokeh_chart(p2)
+    p2 = gridplot([[left_gp]])
+    update(hierarchy_levels, level_a, level_b, level_c, radius_size=0.1)
+    st.bokeh_chart(p2)
+    links = '<span style="color:black; font-family:Courier New; text-align:center; font-size:15px;">Read the full technical report [here](https://docs.google.com/document/d/1ZHE6Z6evxyUsSiojdNatSa_yMDJ8_UlB1K4YD1AhGG8/edit) and the extended article [here](https://docs.google.com/document/d/14lY7niHD0lyYpBj8TtlFGMSA2q4p4u5hl6LnXE4HYLs/edit).</span>'
+    st.markdown(links, unsafe_allow_html=True)
 
-links = '<span style="color:black; font-family:Courier New; text-align:center; font-size:15px;">Read the full technical report [here](https://docs.google.com/document/d/1ZHE6Z6evxyUsSiojdNatSa_yMDJ8_UlB1K4YD1AhGG8/edit) and the extended article [here](https://docs.google.com/document/d/14lY7niHD0lyYpBj8TtlFGMSA2q4p4u5hl6LnXE4HYLs/edit).</span>'
-st.markdown(links, unsafe_allow_html=True)
+pwd = st.sidebar.text_input("Password:", type='password')
+if pwd == st.secrets["PASSWORD"]:
+    skills_tool()
+elif pwd == '':
+    pass
+else:
+    st.error('wrong password. try again.')
