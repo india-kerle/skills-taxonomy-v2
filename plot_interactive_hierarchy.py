@@ -280,9 +280,7 @@ def skills_tool():
     p2 = gridplot([[left_gp]])
     update(hierarchy_levels, level_a, level_b, level_c, radius_size=0.1)
     st.bokeh_chart(p2)
-    links = '<span style="color:black; font-family:Courier New; text-align:center; font-size:15px;">Read the full technical report [here](https://docs.google.com/document/d/1ZHE6Z6evxyUsSiojdNatSa_yMDJ8_UlB1K4YD1AhGG8/edit) and the extended article [here](https://docs.google.com/document/d/14lY7niHD0lyYpBj8TtlFGMSA2q4p4u5hl6LnXE4HYLs/edit).</span>'
-    st.markdown(links, unsafe_allow_html=True)
-
+    
 pwd = st.sidebar.text_input("Password:", type='password')
 if pwd == st.secrets["PASSWORD"]:
     skills_tool()
